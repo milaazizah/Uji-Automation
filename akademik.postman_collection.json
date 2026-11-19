@@ -1,0 +1,225 @@
+{
+  "info": {
+    "_postman_id": "00c83c5f-dce0-42df-a45b-7021acf00a12",
+    "name": "Sistem Akademik API Test",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "60299520",
+    "_collection_link": "https://go.postman.co/collection/60299520-00c83c5f-dce0-42df-a45b-7021acf00a12?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "01 Auth",
+      "item": [
+        {
+          "name": "F01 Login valid",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "F02 Login Gagal",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 CRUD Mahasiswa",
+      "item": [
+        {
+          "name": "F03-2 Read mahasiswa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "F03-3 Update mahasiswa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "F03-4 Delete mahasiswa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "F03-5 Read",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "F03-1 Create mahasiswa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 Keamanan",
+      "item": [
+        {
+          "name": "S03-1 Ubah nilai tanpa login",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "S01- table user",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Akses tanpa apikey",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Get data",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "postman-echo.com/get",
+          "host": [
+            "postman-echo",
+            "com"
+          ],
+          "path": [
+            "get"
+          ]
+        },
+        "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+      },
+      "response": []
+    },
+    {
+      "name": "Post data",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Successful POST request\", function () {",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+              "});",
+              ""
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "postman-echo.com/post",
+          "host": [
+            "postman-echo",
+            "com"
+          ],
+          "path": [
+            "post"
+          ]
+        },
+        "description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": [
+          "pm.request.headers.upsert({ key: \"apikey\", value: pm.environment.get(\"anon_key\") });\r",
+          "pm.request.headers.upsert({ key: \"Authorization\", value: \"Bearer \" + pm.environment.get(\"anon_key\") });\r",
+          "pm.request.headers.upsert({ key: \"Content-Type\", value: \"application/json\" });\r",
+          "pm.request.headers.upsert({ key: \"Prefer\", value: \"return=representation\" });"
+        ],
+        "type": "text/javascript"
+      }
+    }
+  ]
+}
