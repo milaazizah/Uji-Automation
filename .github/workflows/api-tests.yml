@@ -1,0 +1,26 @@
+name: API Tests
+on: [push, pull_request]
+
+jobs:
+  newman:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install -g newman newman-reporter-htmlextra
+      - run: |
+          newman run api-tests/akademik.postman_collection.json \
+            -e api-tests/testing.postman_environment.json \
+            --env-var "base_url=${{ secrets.SUPABASE_URL }}" \
+            --env-var "anon_key=${{ secrets.SUPABASE_ANON_KEY }}" \
+            --env-var "staff_email=${{ secrets.TEST_STAFF_EMAIL }}" \
+            --env-var "staff_password=${{ secrets.TEST_STAFF_PASSWORD }}" \
+            -r cli,htmlextra \
+            --reporter-htmlextra-export laporan.html
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: laporan-newman
+          path: laporan.html
