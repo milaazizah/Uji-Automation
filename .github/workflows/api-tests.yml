@@ -11,8 +11,8 @@ jobs:
           node-version: '20'
       - run: npm install -g newman newman-reporter-htmlextra
       - run: |
-          newman run api-tests/akademik.postman_collection.json \
-            -e api-tests/testing.postman_environment.json \
+          newman run akademik.postman_collection.json \
+            -e testing.postman_environment.json \
             --env-var "base_url=${{ secrets.SUPABASE_URL }}" \
             --env-var "anon_key=${{ secrets.SUPABASE_ANON_KEY }}" \
             --env-var "staff_email=${{ secrets.TEST_STAFF_EMAIL }}" \
