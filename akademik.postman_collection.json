@@ -13,22 +13,88 @@
       "item": [
         {
           "name": "F01 Login valid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));\r\n\r\npm.test(\"Tepat 1 user ditemukan dengan role staff\", () => {\r\n    const data = pm.response.json();\r\n    pm.expect(data).to.be.an(\"array\").with.lengthOf(1);\r\n    pm.expect(data[0].role).to.eql(\"staff\");\r\n});\r\n\r\npm.test(\"Response time di bawah 2 detik\", () => {\r\n    pm.expect(pm.response.responseTime).to.be.below(2000);\r\n});"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": ""
+              "raw": "{{base_url}}/rest/v1/users?email=eq.{{staff_email}}&password=eq.{{staff_password}}&select=id,email,role",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "eq.{{staff_email}}"
+                },
+                {
+                  "key": "password",
+                  "value": "eq.{{staff_password}}"
+                },
+                {
+                  "key": "select",
+                  "value": "id,email,role"
+                }
+              ]
             }
           },
           "response": []
         },
         {
           "name": "F02 Login Gagal",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Password salah menghasilkan array kosong\", () => {\r\n    pm.expect(pm.response.json()).to.be.an(\"array\").that.is.empty;\r\n});"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": ""
+              "raw": "{{base_url}}/rest/v1/users?email=eq.{{staff_email}}&password=eq.TesSalah123&select=id,email,role",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "email",
+                  "value": "eq.{{staff_email}}"
+                },
+                {
+                  "key": "password",
+                  "value": "eq.TesSalah123"
+                },
+                {
+                  "key": "select",
+                  "value": "id,email,role"
+                }
+              ]
             }
           },
           "response": []
@@ -40,55 +106,201 @@
       "item": [
         {
           "name": "F03-2 Read mahasiswa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));\r\n\r\npm.test(\"Tepat 1 data ditemukan\", () => {\r\n    pm.expect(pm.response.json()).to.be.an(\"array\").with.lengthOf(1);\r\n});\r\n\r\npm.test(\"Nama sesuai data awal\", () => {\r\n    pm.expect(pm.response.json()[0].nama).to.eql(\"Mahasiswa Uji\");\r\n});"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": ""
+              "raw": "{{base_url}}/rest/v1/mahasiswa?id_mahasiswa=eq.{{test_id_mahasiswa}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id_mahasiswa",
+                  "value": "eq.{{test_id_mahasiswa}}"
+                }
+              ]
             }
           },
           "response": []
         },
         {
           "name": "F03-3 Update mahasiswa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));\r\n\r\npm.test(\"Nama berubah\", () => {\r\n    pm.expect(pm.response.json()[0].nama).to.eql(\"Nama Diubah\");\r\n});"
+                ]
+              }
+            }
+          ],
           "request": {
-            "method": "GET",
+            "method": "PATCH",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"nama\": \"Nama Diubah\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": ""
+              "raw": "{{base_url}}/rest/v1/mahasiswa?id_mahasiswa=eq.{{test_id_mahasiswa}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id_mahasiswa",
+                  "value": "eq.{{test_id_mahasiswa}}"
+                }
+              ]
             }
           },
           "response": []
         },
         {
           "name": "F03-4 Delete mahasiswa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Berhasil dihapus (200 atau 204)\", () => {\r\n    pm.expect([200, 204]).to.include(pm.response.code);\r\n});"
+                ]
+              }
+            }
+          ],
           "request": {
-            "method": "GET",
+            "method": "DELETE",
             "header": [],
             "url": {
-              "raw": ""
+              "raw": "{{base_url}}/rest/v1/mahasiswa?id_mahasiswa=eq.{{test_id_mahasiswa}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id_mahasiswa",
+                  "value": "eq.{{test_id_mahasiswa}}"
+                }
+              ]
             }
           },
           "response": []
         },
         {
           "name": "F03-5 Read",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", () => pm.response.to.have.status(200));\r\n\r\npm.test(\"Data sudah tidak ada\", () => {\r\n    pm.expect(pm.response.json()).to.be.an(\"array\").that.is.empty;\r\n});"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": ""
+              "raw": "{{base_url}}/rest/v1/mahasiswa?id_mahasiswa=eq.{{test_id_mahasiswa}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "id_mahasiswa",
+                  "value": "eq.{{test_id_mahasiswa}}"
+                }
+              ]
             }
           },
           "response": []
         },
         {
           "name": "F03-1 Create mahasiswa",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Berhasil dibuat (201)\", () => pm.response.to.have.status(201));\r\n\r\npm.test(\"Data sesuai\", () => {\r\n    const d = pm.response.json();\r\n    pm.expect(d[0].id_mahasiswa).to.eql(pm.environment.get(\"test_id_mahasiswa\"));\r\n    pm.expect(d[0].nama).to.eql(\"Mahasiswa Uji\");\r\n});"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const uniqueId = \"999\" + Math.floor(100000 + Math.random() * 900000);\r\npm.environment.set(\"test_id_mahasiswa\", String(uniqueId));"
+                ]
+              }
+            }
+          ],
           "request": {
-            "method": "GET",
+            "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id_mahasiswa\": \"{{test_id_mahasiswa}}\",\r\n  \"nama\": \"Mahasiswa Uji\",\r\n  \"program_studi\": \"D3 Perikanan Tangkap\",\r\n  \"email\": \"uji@test.com\",\r\n  \"id_kelas\": {{id_kelas}},\r\n  \"angkatan\": 2026,\r\n  \"status\": \"Aktif\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": ""
+              "raw": "{{base_url}}/rest/v1/mahasiswa",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "mahasiswa"
+              ]
             }
           },
           "response": []
@@ -100,33 +312,130 @@
       "item": [
         {
           "name": "S03-1 Ubah nilai tanpa login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"S03: anon tidak boleh mengubah nilai\", () => {\r\n    const ditolak = [401, 403].includes(pm.response.code);\r\n    const tidakBerubah = pm.response.code === 200 && pm.response.json().length === 0;\r\n    pm.expect(ditolak || tidakBerubah, \"nilai berhasil diubah tanpa login\").to.be.true;\r\n});"
+                ]
+              }
+            }
+          ],
           "request": {
-            "method": "GET",
+            "method": "PATCH",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"nilai_akhir\": 100 }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": ""
+              "raw": "{{base_url}}/rest/v1/nilai?id_mahasiswa=eq.{{mhs_id}}&id_jadwal=eq.{{id_jadwal}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "nilai"
+              ],
+              "query": [
+                {
+                  "key": "id_mahasiswa",
+                  "value": "eq.{{mhs_id}}"
+                },
+                {
+                  "key": "id_jadwal",
+                  "value": "eq.{{id_jadwal}}"
+                }
+              ]
             }
           },
           "response": []
         },
         {
           "name": "S01- table user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const d = pm.response.json();\r\n\r\npm.test(\"S01: Tabel users tidak bisa dibaca tanpa login\", () => {\r\n    const ditolak = [401, 403].includes(pm.response.code);\r\n    const kosong = Array.isArray(d) && d.length === 0;\r\n    pm.expect(ditolak || kosong, \"data users bisa dibaca siapa saja\").to.be.true;\r\n});\r\n\r\npm.test(\"S02: Kolom password tidak terbaca\", () => {\r\n    const bocor = Array.isArray(d) && d.some(u => \"password\" in u);\r\n    pm.expect(bocor, \"kolom password terbaca lewat API\").to.be.false;\r\n});"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": ""
+              "raw": "{{base_url}}/rest/v1/users?select=*",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "select",
+                  "value": "*"
+                }
+              ]
             }
           },
           "response": []
         },
         {
           "name": "Akses tanpa apikey",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.request.headers.remove(\"apikey\");\r\npm.request.headers.remove(\"Authorization\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Tanpa apikey ditolak (401)\", () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": ""
+              "raw": "{{base_url}}/rest/v1/mahasiswa?select=*",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rest",
+                "v1",
+                "mahasiswa"
+              ],
+              "query": [
+                {
+                  "key": "select",
+                  "value": "*"
+                }
+              ]
             }
           },
           "response": []
